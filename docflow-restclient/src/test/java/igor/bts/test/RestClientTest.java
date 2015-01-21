@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -28,12 +29,16 @@ import igor.bts.jaxb.Service;
 import igor.bts.jaxb.TpInternet;
 import igor.bts.jaxb.TpInternetList;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -41,6 +46,8 @@ import org.junit.Test;
 
 public class RestClientTest {
 	private static javax.ws.rs.client.Client client;
+	private static ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
+	private static Validator validator;
 	private static final String urlBank = "http://127.0.0.1:8080/docflow/rs/admin/bank"; 
 	private static final String urlManager = "http://127.0.0.1:8080/docflow/rs/admin/manager";
 	private static final String urlDocType = "http://127.0.0.1:8080/docflow/rs/admin/doctype";
@@ -55,7 +62,18 @@ public class RestClientTest {
 	public static void createClient(){
 		client = ClientBuilder.newClient();
 	}
-	//@Test
+	
+	@BeforeClass
+	public static void createValidator(){
+		validator = vf.getValidator();
+	}
+	
+	@AfterClass
+	public static void closeValidator(){
+		vf.close();
+	}
+	
+	@Test
 	public void testBank(){
 		/* *********** Bank ********** */
 		/* Create */
@@ -118,7 +136,7 @@ public class RestClientTest {
 		}
 	}	
 	
-	//@Test
+	@Test
 	public void testDocType(){
 		DocType docType1 = new DocType("name1", "info", 0, (short)0);
 		DocType docType2 = new DocType("name2", "info", 0, (short)0);
@@ -169,7 +187,7 @@ public class RestClientTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void testEdIzm(){
 		EdIzm edIzm1 = new EdIzm("name1", "info1");
 		EdIzm edIzm2 = new EdIzm("name2", "info2");
@@ -219,7 +237,7 @@ public class RestClientTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testManager(){
 		Manager manager1 = new Manager("fname1", "sname1");
 		Manager manager2 = new Manager("fname2", "sname2");
@@ -264,7 +282,7 @@ public class RestClientTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testTpInternet(){
 		TpInternet t1 = new TpInternet(new BigDecimal(0), new BigDecimal(0),
 				(byte)0, new BigDecimal(0), true, new BigDecimal(0));
@@ -311,7 +329,7 @@ public class RestClientTest {
 		Manager manager = new Manager("test", "test");
 		Bank bank = new Bank("TestBank", "111111111", "2222222222");
 		Podpisant podpisant = new Podpisant("fio", "dolzhnost", "", "", null, "");
-		
+			
 		//Create manager
 		Response resp = client.target(urlManager).request(MediaType.APPLICATION_XML)
 				.post(Entity.entity(manager, MediaType.APPLICATION_XML));
@@ -338,13 +356,15 @@ public class RestClientTest {
 		assertEquals(resp.getStatus(), 200);
 		bank = resp.readEntity(Bank.class);
 		assertTrue(bank.getId() != null);
+		
+		assertEquals(validator.validate(manager).size(), 0);
+		assertEquals(validator.validate(bank).size(), 0);
+		assertEquals(validator.validate(podpisant).size(), 0);
 		//Create Client
 		Client cl = new Client("Конин, ИП", "ИП Конин", "450022, г.Уфа", "450000, ул.Ленина, 28",
 				true, "1234567890", "1234567890", "okpo", podpisant, "2299499", 
 				false, "", "", manager, bank, null, null, null);
-		//Client cl = new Client("Конин, ИП", "ИП Конин", "450022, г.Уфа", "450000, ул.Ленина, 28",
-		//		true, "1234567890", "1234567890", "okpo", null, "2299499", 
-		//		false, "", "", null, null, null, null, null);
+		assertEquals(validator.validate(client).size(), 0);
 		resp = client.target(urlClient).request(MediaType.APPLICATION_XML)
 				.post(Entity.entity(cl, MediaType.APPLICATION_XML));
 		assertEquals(resp.getStatus(), 201);

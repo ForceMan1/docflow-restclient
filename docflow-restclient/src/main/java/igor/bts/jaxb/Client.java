@@ -1,5 +1,7 @@
 package igor.bts.jaxb;
+
 import java.util.List;
+
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -65,6 +67,7 @@ public class Client {
 	}
 	
 	/**** Getters & Setters ************************/
+	
 	@XmlAttribute
 	public Integer getId() {
 		return id;
@@ -74,7 +77,7 @@ public class Client {
 		this.id = id;
 	}
 
-	@NotNull @Size(max = 120)
+	//@Size(max = 120) //@NotNull 
 	@XmlAttribute
 	public String getSmallname() {
 		return smallname;
@@ -84,7 +87,7 @@ public class Client {
 		this.smallname = smallname;
 	}
 
-	@NotNull @Size(max = 255)
+	//@Size(max = 255) //@NotNull
 	@XmlAttribute
 	public String getFullname() {
 		return fullname;
@@ -94,7 +97,7 @@ public class Client {
 		this.fullname = fullname;
 	}
 
-	@NotNull @Size(max = 255)
+	//@Size(max = 255) //@NotNull
 	@XmlAttribute
 	public String getUrid_address() {
 		return urid_address;
@@ -104,7 +107,7 @@ public class Client {
 		this.urid_address = urid_address;
 	}
 
-	@NotNull @Size(max = 255)
+	//@Size(max = 255) //@NotNull
 	@XmlAttribute
 	public String getPocht_address() {
 		return pocht_address;
@@ -114,7 +117,7 @@ public class Client {
 		this.pocht_address = pocht_address;
 	}
 	
-	@NotNull
+	//@NotNull
 	@XmlAttribute
 	public Boolean getIs_phys() {
 		return is_phys;
@@ -124,7 +127,7 @@ public class Client {
 		this.is_phys = is_phys;
 	}
 
-	@Size(min=10, max = 12)
+	//@Size(min=10, max = 12)
 	@XmlAttribute
 	public String getInn() {
 		return inn;
@@ -134,7 +137,7 @@ public class Client {
 		this.inn = inn;
 	}
 
-	@Pattern(regexp="\\d{10}")
+	//@Pattern(regexp="\\d{10}")
 	@XmlAttribute
 	public String getKpp() {
 		return kpp;
@@ -162,7 +165,7 @@ public class Client {
 		this.podpisant = podpisant;
 	}
 
-	@Size(max = 90)
+	//@Size(max = 90)
 	@XmlAttribute
 	public String getPhone() {
 		return phone;
@@ -181,7 +184,7 @@ public class Client {
 		this.is_delivery = is_delivery;
 	}
 
-	@Size(max = 10)
+	//@Size(max = 10)
 	@XmlAttribute
 	public String getDelivery_index() {
 		return delivery_index;
@@ -191,7 +194,7 @@ public class Client {
 		this.delivery_index = delivery_index;
 	}
 
-	@Size(max = 255)
+	//@Size(max = 255)
 	@XmlAttribute
 	public String getDelivery_address() {
 		return delivery_address;
@@ -200,6 +203,7 @@ public class Client {
 	public void setDelivery_address(String delivery_address) {
 		this.delivery_address = delivery_address;
 	}
+
 
 	@XmlElement
 	public Manager getManager() {
@@ -219,7 +223,7 @@ public class Client {
 		this.bank = bank;
 	}
 
-	@Pattern(regexp = "\\d{20}")
+	//@Pattern(regexp = "\\d{20}")
 	@XmlAttribute
 	public String getRas_schet() {
 		return ras_schet;
@@ -229,7 +233,7 @@ public class Client {
 		this.ras_schet = ras_schet;
 	}
 
-	@Pattern(regexp = "\\d{20}")
+	//@Pattern(regexp = "\\d{20}")
 	@XmlAttribute
 	public String getKor_schet() {
 		return kor_schet;
@@ -239,6 +243,7 @@ public class Client {
 		this.kor_schet = kor_schet;
 	}
 
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="client")
 	@XmlElement(name = "dogovor")
 	public List<Dogovor> getDogovors() {
 		return dogovors;
@@ -253,10 +258,12 @@ public class Client {
 	public boolean equals(Object o){
 		if(o instanceof Client){
 			Client client = (Client)o;
-			if(client.getInn() != inn 
-					|| client.getPodpisant().getPass_nomer() != podpisant.getPass_nomer()
-					|| client.getPodpisant().getPass_seria() != podpisant.getPass_seria())
+			if(client.getInn() != inn)
 				return false;
+			if(client.getPodpisant() != null)
+				if(client.getPodpisant().getPass_nomer().equals(podpisant.getPass_nomer())
+					|| client.getPodpisant().getPass_seria().equals(podpisant.getPass_seria()))
+					return false;
 			return true;
 		}else
 			return false;

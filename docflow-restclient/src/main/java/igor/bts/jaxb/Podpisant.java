@@ -1,11 +1,10 @@
 package igor.bts.jaxb;
-
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "podpisant")
@@ -31,7 +30,7 @@ public class Podpisant implements Serializable{
 	}
 	
 	/****** Setters & Getters ***************/
-	@XmlElement(name = "fio")
+	@XmlAttribute
 	public String getFio() {
 		return fio;
 	}
@@ -39,7 +38,7 @@ public class Podpisant implements Serializable{
 		this.fio = fio;
 	}
 	
-	@XmlElement(name = "dolzhnost")
+	@XmlAttribute
 	public String getDolzhnost() {
 		return dolzhnost;
 	}
@@ -47,7 +46,7 @@ public class Podpisant implements Serializable{
 		this.dolzhnost = dolzhnost;
 	}
 	
-	@XmlElement(name = "pass_seria")
+	@XmlAttribute
 	public String getPass_seria() {
 		return pass_seria;
 	}
@@ -55,7 +54,7 @@ public class Podpisant implements Serializable{
 		this.pass_seria = pass_seria;
 	}
 	
-	@XmlElement(name = "pass_nomer")
+	@XmlAttribute
 	public String getPass_nomer() {
 		return pass_nomer;
 	}
@@ -63,7 +62,7 @@ public class Podpisant implements Serializable{
 		this.pass_nomer = pass_nomer;
 	}
 	
-	@XmlElement(name = "pass_date")
+	@XmlAttribute
 	public Date getPass_date() {
 		return pass_date;
 	}
@@ -71,7 +70,7 @@ public class Podpisant implements Serializable{
 		this.pass_date = pass_date;
 	}
 	
-	@XmlElement(name = "pass_vydan")
+	@XmlAttribute
 	public String getPass_vydan() {
 		return pass_vydan;
 	}
